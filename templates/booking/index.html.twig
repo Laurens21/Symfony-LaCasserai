@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Booking index{% endblock %}
+
+{% block body %}
+    <h1>Booking index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Date</th>
+                <th>Check_in_date</th>
+                <th>Check_out_date</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for booking in bookings %}
+            <tr>
+                <td>{{ booking.id }}</td>
+                <td>{{ booking.date ? booking.date|date('Y-m-d') : '' }}</td>
+                <td>{{ booking.checkInDate ? booking.checkInDate|date('Y-m-d H:i:s T') : '' }}</td>
+                <td>{{ booking.checkOutDate ? booking.checkOutDate|date('Y-m-d H:i:s T') : '' }}</td>
+                <td>
+                    <a style="margin-right: 10px" class="btn btn-primary" href="{{ path('booking_show', {'id': booking.id}) }}">show</a>
+                    <a class="btn btn-secondary" href="{{ path('booking_edit', {'id': booking.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <a class="btn btn-success" href="{{ path('booking_new') }}">Create new</a>
+    {% endblock %}

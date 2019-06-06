@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Roomtype index{% endblock %}
+
+{% block body %}
+    <h1>Roomtype index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Price</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for roomtype in roomtypes %}
+            <tr>
+                <td>{{ roomtype.id }}</td>
+                <td>{{ roomtype.name }}</td>
+                <td>{{ roomtype.price }}</td>
+                <td>
+                    <a href="{{ path('roomtype_show', {'id': roomtype.id}) }}">show</a>
+                    <a href="{{ path('roomtype_edit', {'id': roomtype.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('roomtype_new') }}">Create new</a>
+{% endblock %}
