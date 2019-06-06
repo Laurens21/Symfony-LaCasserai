@@ -17,10 +17,11 @@
             </tr>
         </tbody>
     </table>
+    <div style="display: flex">
+    <a style="margin-right: 10px" class="btn btn-primary" href="{{ path('paymentmethod_index') }}">back to list</a>
 
-    <a href="{{ path('paymentmethod_index') }}">back to list</a>
-
-    <a href="{{ path('paymentmethod_edit', {'id': paymentmethod.id}) }}">edit</a>
+    <a style="margin-right: 10px" class="btn btn-secondary" href="{{ path('paymentmethod_edit', {'id': paymentmethod.id}) }}">edit</a>
 
     {{ include('paymentmethod/_delete_form.html.twig') }}
+    </div>
 {% endblock %}

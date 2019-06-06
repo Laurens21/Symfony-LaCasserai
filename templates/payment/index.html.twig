@@ -1,14 +1,15 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Payment index{% endblock %}
+{% block title %}Payments{% endblock %}
 
 {% block body %}
-    <h1>Payment index</h1>
+    <h1>Payments</h1>
 
     <table class="table">
         <thead>
             <tr>
                 <th>Id</th>
+                <th>Name</th>
                 <th>Bank_details</th>
                 <th>Card_details</th>
                 <th>Date_payment_due</th>
@@ -21,14 +22,15 @@
         {% for payment in payments %}
             <tr>
                 <td>{{ payment.id }}</td>
+                <td>{{ payment.name }}</td>
                 <td>{{ payment.bankDetails }}</td>
                 <td>{{ payment.cardDetails }}</td>
                 <td>{{ payment.datePaymentDue ? payment.datePaymentDue|date('Y-m-d') : '' }}</td>
                 <td>{{ payment.datePaymentMade ? payment.datePaymentMade|date('Y-m-d') : '' }}</td>
                 <td>{{ payment.amountPaid }}</td>
                 <td>
-                    <a href="{{ path('payment_show', {'id': payment.id}) }}">show</a>
-                    <a href="{{ path('payment_edit', {'id': payment.id}) }}">edit</a>
+                    <a style="margin-right: 10px" class="btn btn-primary" href="{{ path('payment_show', {'id': payment.id}) }}">show</a>
+                    <a class="btn btn-secondary" href="{{ path('payment_edit', {'id': payment.id}) }}">edit</a>
                 </td>
             </tr>
         {% else %}
@@ -39,5 +41,5 @@
         </tbody>
     </table>
 
-    <a href="{{ path('payment_new') }}">Create new</a>
+    <a class="btn btn-success" href="{{ path('payment_new') }}">Create new</a>
 {% endblock %}

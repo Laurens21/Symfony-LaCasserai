@@ -1,9 +1,9 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Roomtype index{% endblock %}
+{% block title %}Roomtypes{% endblock %}
 
 {% block body %}
-    <h1>Roomtype index</h1>
+    <h1>Roomtypes</h1>
 
     <table class="table">
         <thead>
@@ -21,8 +21,8 @@
                 <td>{{ roomtype.name }}</td>
                 <td>{{ roomtype.price }}</td>
                 <td>
-                    <a href="{{ path('roomtype_show', {'id': roomtype.id}) }}">show</a>
-                    <a href="{{ path('roomtype_edit', {'id': roomtype.id}) }}">edit</a>
+                    <a style="margin-right: 10px" class="btn btn-primary" href="{{ path('roomtype_show', {'id': roomtype.id}) }}">show</a>
+                    <a class="btn btn-secondary" href="{{ path('roomtype_edit', {'id': roomtype.id}) }}">edit</a>
                 </td>
             </tr>
         {% else %}
@@ -33,5 +33,5 @@
         </tbody>
     </table>
 
-    <a href="{{ path('roomtype_new') }}">Create new</a>
+    <a class="btn btn-success" href="{{ path('roomtype_new') }}">Create new</a>
 {% endblock %}

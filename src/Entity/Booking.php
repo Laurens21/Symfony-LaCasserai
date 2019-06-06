@@ -107,4 +107,9 @@ class Booking
 
         return $this;
     }
+
+    public function __ToString()
+    {
+        return (string) $this->getId();
+    }
 }

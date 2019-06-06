@@ -1,9 +1,9 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Paymentmethod index{% endblock %}
+{% block title %}Paymentmethods{% endblock %}
 
 {% block body %}
-    <h1>Paymentmethod index</h1>
+    <h1>Paymentmethods</h1>
 
     <table class="table">
         <thead>
@@ -19,8 +19,8 @@
                 <td>{{ paymentmethod.id }}</td>
                 <td>{{ paymentmethod.name }}</td>
                 <td>
-                    <a href="{{ path('paymentmethod_show', {'id': paymentmethod.id}) }}">show</a>
-                    <a href="{{ path('paymentmethod_edit', {'id': paymentmethod.id}) }}">edit</a>
+                    <a style="margin-right: 10px" class="btn btn-primary" href="{{ path('paymentmethod_show', {'id': paymentmethod.id}) }}">show</a>
+                    <a class="btn btn-secondary" href="{{ path('paymentmethod_edit', {'id': paymentmethod.id}) }}">edit</a>
                 </td>
             </tr>
         {% else %}
@@ -31,5 +31,5 @@
         </tbody>
     </table>
 
-    <a href="{{ path('paymentmethod_new') }}">Create new</a>
+    <a class="btn btn-success" href="{{ path('paymentmethod_new') }}">Create new</a>
 {% endblock %}

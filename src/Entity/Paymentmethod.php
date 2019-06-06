@@ -37,4 +37,9 @@ class Paymentmethod
 
         return $this;
     }
+
+    public function __ToString()
+    {
+        return (string) $this->getName();
+    }
 }

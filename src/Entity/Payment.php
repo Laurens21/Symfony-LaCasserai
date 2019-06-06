@@ -53,6 +53,11 @@ class Payment
      */
     private $booking_id;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $name;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -138,6 +143,18 @@ class Payment
     public function setBookingId(booking $booking_id): self
     {
         $this->booking_id = $booking_id;
+
+        return $this;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): self
+    {
+        $this->name = $name;
 
         return $this;
     }
