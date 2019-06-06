@@ -10,19 +10,27 @@
         table{
             color: white !important;
         }
+
+        .nav-link:hover{
+            background-color:gray;
+            transition: 0.4s;
+        }
+        .nav-link:active{
+            background-color:black;
+        }
     </style>
     <title>{% block title %}Welcome!{% endblock %}</title>
     <!-- Custom styles for this template -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     {% block stylesheets %}{% endblock %}
 </head>
-<body style="color:white ;background-color: #8b9dc3; position: relative; min-height: 100vh; padding-bottom: 5rem;">
+<body style="color:white ;background-color: #8b9dc3; position: relative; min-height: 100vh; padding-bottom: 5rem; font-family: 'Arial Black' sans-serif">
 <header style="margin-bottom: 20px">
-    <nav class="navbar navbar-expand-md navbar-dark " style="background-color: #3b5998">
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark">
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarCollapse">
+        <div style="text-transform:uppercase;" class="collapse navbar-collapse" id="navbarCollapse">
             {% if is_granted('ROLE_ADMIN') %}
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item ">
@@ -47,12 +55,25 @@
                     <a class="nav-link text-white" href="{{ path('roomtype_index') }}">RoomTypes</a>
                 </li>
             </ul>
-            {% elseif is_granted('ROLE_CUSTOMER') %}
-                // hier komt de nav voor de klant
+            {% elseif is_granted('ROLE_USER') %}
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="{{ path('default') }}">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="{{ path('booking_index') }}">Bookings</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="{{ path('room_index') }}">Rooms</a>
+                </li>
+            </ul>
             {% else %}
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item ">
                     <a class="nav-link text-white" href="{{ path('default') }}">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="{{ path('room_index') }}">Rooms</a>
                 </li>
             </ul>
             {% endif %}
@@ -69,7 +90,6 @@
                               ] %}          
                           {% endif %}
                       <div class="navbar-collapse collapse">
-                            <a class="nav-link text-white">{{ app.user }}</a>
                         <ul class="nav navbar-nav">
                           {% for item in mainMenu %}
                             <li class="nav-item"{{ app.request.get('_route') == item['path'] ? ' class="active"' : '' }}>
@@ -83,7 +103,7 @@
         </div>
     </nav>
 </header>
-<div style="background-color: #3b5998; padding: 20px; max-width: 75%; margin: 0 auto;">{% block login_register %}{% endblock %}{% block body %}{% endblock %}</div>
+<div class="bg-dark" style="padding: 20px; max-width: 75%; margin: 0 auto;">{% block login_register %}{% endblock %}{% block body %}{% endblock %}</div>
 <!-- FOOTER -->
 <div style="margin-top: 20px;"></div>
 <footer class="bg-dark" style="position: absolute; bottom: 0; width: 100%; height: 5rem">

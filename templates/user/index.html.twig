@@ -27,8 +27,8 @@
                 <td>{{ user.lastLogin ? user.lastLogin|date('Y-m-d H:i:s') : '' }}</td>
                 <td>{{ user.roles ? user.roles|join(', ') : '' }}</td>
                 <td>
-                    <a href="{{ path('user_show', {'id': user.id}) }}">show</a>
-                    <a href="{{ path('user_edit', {'id': user.id}) }}">edit</a>
+                    <a style="margin-right: 10px" class="btn btn-primary"  href="{{ path('user_show', {'id': user.id}) }}">show</a>
+                    <a class="btn btn-secondary" href="{{ path('user_edit', {'id': user.id}) }}">edit</a>
                 </td>
             </tr>
         {% else %}
@@ -39,5 +39,5 @@
         </tbody>
     </table>
 
-    <a href="{{ path('user_new') }}">Create new</a>
+    <a class="btn btn-success" href="{{ path('user_new') }}">Create new</a>
 {% endblock %}
