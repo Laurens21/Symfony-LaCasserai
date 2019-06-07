@@ -35,3 +35,9 @@ services:
         arguments: ['@security.token_storage', '@doctrine']
         tags:
             - { name: kernel.event_listener, event: kernel.controller, method: onCoreController }
+    
+    App.registration_listener:
+        class: App\EventListener\RegistrationListener
+        arguments: []
+        tags:
+            - { name: kernel.event_subscriber }

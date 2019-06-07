@@ -79,6 +79,10 @@
                 <th>Telephone</th>
                 <td>{{ user.telephone }}</td>
             </tr>
+            <tr>
+                <th>lastActivityAt</th>
+                <td>{{ user.lastActivityAt|date('d-m-Y H:i') }}</td>
+            </tr>
         </tbody>
     </table>
     <div style="display: flex">
