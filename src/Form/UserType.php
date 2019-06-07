@@ -29,6 +29,7 @@ class UserType extends AbstractType
             ->add('address')
             ->add('postcode')
             ->add('telephone')
+            ->add('lastActivityAt');
         ;
     }
 

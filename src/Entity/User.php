@@ -3,6 +3,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM; 
 /**
@@ -48,10 +50,29 @@ class User extends BaseUser
      */
     private $telephone;
 
+    /**
+     * Date/Time of the last activity
+     *
+     * @var \Datetime
+     *
+     * @ORM\Column(name="last_activity_at", type="datetimetz", nullable=true)
+     */
+    protected $lastActivityAt;
+
     public function __construct()
     {
         parent::__construct();
         // your own logic
+    }
+
+    public function getLastActivityAt(): ?\DateTimeInterface
+    {
+        return $this->lastActivityAt;
+    }
+    public function setLastActivityAt(?\DateTimeInterface $lastActivityAt): self
+    {
+        $this->lastActivityAt = $lastActivityAt;
+        return $this;
     }
 
     public function getFirstname(): ?string
