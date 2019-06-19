@@ -12,7 +12,9 @@
                 <th>Date</th>
                 <th>Check_in_date</th>
                 <th>Check_out_date</th>
+                {% if is_granted("ROLE_ADMIN")%}
                 <th>actions</th>
+                {% endif %}
             </tr>
         </thead>
         <tbody>
@@ -22,10 +24,12 @@
                 <td>{{ booking.date ? booking.date|date('Y-m-d') : '' }}</td>
                 <td>{{ booking.checkInDate ? booking.checkInDate|date('Y-m-d H:i:s T') : '' }}</td>
                 <td>{{ booking.checkOutDate ? booking.checkOutDate|date('Y-m-d H:i:s T') : '' }}</td>
+                {% if is_granted("ROLE_ADMIN")%}
                 <td>
                     <a style="margin-right: 10px" class="btn btn-primary" href="{{ path('booking_show', {'id': booking.id}) }}">show</a>
                     <a class="btn btn-secondary" href="{{ path('booking_edit', {'id': booking.id}) }}">edit</a>
                 </td>
+                {% endif %}
             </tr>
         {% else %}
             <tr>
@@ -34,5 +38,7 @@
         {% endfor %}
         </tbody>
     </table>
+    {% if is_granted("ROLE_ADMIN")%}
     <a class="btn btn-success" href="{{ path('booking_new') }}">Create new</a>
+    {% endif %}
     {% endblock %}

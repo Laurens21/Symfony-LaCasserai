@@ -10,7 +10,9 @@
             <tr>
                 <th>Id</th>
                 <th>Name</th>
+                {% if is_granted("ROLE_ADMIN")%}
                 <th>actions</th>
+                {% endif %}
             </tr>
         </thead>
         <tbody>
@@ -18,10 +20,12 @@
             <tr>
                 <td>{{ paymentmethod.id }}</td>
                 <td>{{ paymentmethod.name }}</td>
+                {% if is_granted("ROLE_ADMIN")%}
                 <td>
                     <a style="margin-right: 10px" class="btn btn-primary" href="{{ path('paymentmethod_show', {'id': paymentmethod.id}) }}">show</a>
                     <a class="btn btn-secondary" href="{{ path('paymentmethod_edit', {'id': paymentmethod.id}) }}">edit</a>
                 </td>
+                {% endif %}
             </tr>
         {% else %}
             <tr>
@@ -30,6 +34,7 @@
         {% endfor %}
         </tbody>
     </table>
-
+    {% if is_granted("ROLE_ADMIN")%}
     <a class="btn btn-success" href="{{ path('paymentmethod_new') }}">Create new</a>
+    {% endif %}
 {% endblock %}

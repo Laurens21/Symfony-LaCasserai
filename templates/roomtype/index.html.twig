@@ -11,7 +11,9 @@
                 <th>Id</th>
                 <th>Name</th>
                 <th>Price</th>
+                {% if is_granted("ROLE_ADMIN")%}
                 <th>actions</th>
+                {% endif %}
             </tr>
         </thead>
         <tbody>
@@ -20,10 +22,12 @@
                 <td>{{ roomtype.id }}</td>
                 <td>{{ roomtype.name }}</td>
                 <td>{{ roomtype.price }}</td>
+                {% if is_granted("ROLE_ADMIN")%}
                 <td>
                     <a style="margin-right: 10px" class="btn btn-primary" href="{{ path('roomtype_show', {'id': roomtype.id}) }}">show</a>
                     <a class="btn btn-secondary" href="{{ path('roomtype_edit', {'id': roomtype.id}) }}">edit</a>
                 </td>
+                {% endif %}
             </tr>
         {% else %}
             <tr>
@@ -32,6 +36,7 @@
         {% endfor %}
         </tbody>
     </table>
-
+    {% if is_granted("ROLE_ADMIN")%}
     <a class="btn btn-success" href="{{ path('roomtype_new') }}">Create new</a>
+    {% endif %}
 {% endblock %}

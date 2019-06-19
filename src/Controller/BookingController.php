@@ -9,20 +9,35 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Security;
 
 /**
  * @Route("/booking")
  */
 class BookingController extends AbstractController
 {
+    private $security;
+
+    public function __construct(Security $security)
+    {
+        $this->security = $security;
+    }
+
     /**
      * @Route("/", name="booking_index", methods={"GET"})
      */
     public function index(BookingRepository $bookingRepository): Response
-    {
-        return $this->render('booking/index.html.twig', [
-            'bookings' => $bookingRepository->findAll(),
-        ]);
+    {   
+        $user = $this->getUser()->getId();
+        if ($this->security->isGranted('ROLE_ADMIN')){
+            return $this->render('booking/index.html.twig', [
+                'bookings' => $bookingRepository->findAll(),
+            ]);
+        } else {
+            return $this->render('booking/index.html.twig', [
+                'bookings' => $bookingRepository->findBy(['user_id' => $user]),
+            ]);
+        }
     }
 
     /**

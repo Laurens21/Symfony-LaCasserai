@@ -54,8 +54,11 @@
                 <li class="nav-item">
                     <a class="nav-link text-white" href="{{ path('roomtype_index') }}">RoomTypes</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="{{ path('contact') }}">Contact</a>
+                </li>
             </ul>
-            {% elseif is_granted('ROLE_USER') %}
+            {% elseif is_granted('ROLE_CUSTOMER') %}
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
                     <a class="nav-link text-white" href="{{ path('default') }}">Home <span class="sr-only">(current)</span></a>
@@ -66,6 +69,9 @@
                 <li class="nav-item">
                     <a class="nav-link text-white" href="{{ path('room_index') }}">Rooms</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="{{ path('contact') }}">Contact</a>
+                </li>
             </ul>
             {% else %}
             <ul class="navbar-nav mr-auto">
@@ -74,6 +80,9 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link text-white" href="{{ path('room_index') }}">Rooms</a>
+                </li>
+                 <li class="nav-item">
+                    <a class="nav-link text-white" href="{{ path('contact') }}">Contact</a>
                 </li>
             </ul>
             {% endif %}

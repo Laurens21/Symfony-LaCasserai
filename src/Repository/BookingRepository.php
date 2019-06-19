@@ -19,23 +19,25 @@ class BookingRepository extends ServiceEntityRepository
         parent::__construct($registry, Booking::class);
     }
 
+    
     /**
-     * @return Reservation[] Returns an array of Reservation objects
-     * $value = ['checkin' => '17-05-2019', 'checkout' => '24-05-2019']
+     * @param $startDate
+     * @param $endDate
+     * @return Booking[] Returns an array of Booking objects
      */
-    public function findRoomsReserved($value)
+    public function findReservationsBetween($startDate, $endDate)
     {
-        // dump($value);
-        // halt();
-        return $this->createQueryBuilder('r')
-            ->andWhere('r.exampleField = :val')
-            ->setParameter('checkin', $value['checkin'])
-            ->setParameter('checkout', $value['checkout'])
-            //->orderBy('r.id', 'ASC')
-            //->setMaxResults(10)
+        return $this->createQueryBuilder('b')
+            ->select("IDENTITY(b.room)")
+            ->orWhere('(b.start_date BETWEEN :start AND :end)')
+            ->orWhere('(b.end_date BETWEEN :start AND :end)')
+            ->orWhere('(b.start_date <= :start and b.end_date >= :end)')
+            ->setParameters(new ArrayCollection([
+                new Parameter("start", $startDate),
+                new Parameter("end", $endDate)
+            ]))
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
     }
 
 

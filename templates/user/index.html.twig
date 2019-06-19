@@ -14,7 +14,9 @@
                 <th>Enabled</th>
                 <th>LastLogin</th>
                 <th>Roles</th>
+                {% if is_granted("ROLE_ADMIN")%}
                 <th>actions</th>
+                {% endif %}
             </tr>
         </thead>
         <tbody>
@@ -26,10 +28,12 @@
                 <td>{{ user.enabled ? 'Yes' : 'No' }}</td>
                 <td>{{ user.lastLogin ? user.lastLogin|date('Y-m-d H:i:s') : '' }}</td>
                 <td>{{ user.roles ? user.roles|join(', ') : '' }}</td>
+                {% if is_granted("ROLE_ADMIN")%}
                 <td>
                     <a style="margin-right: 10px" class="btn btn-primary"  href="{{ path('user_show', {'id': user.id}) }}">show</a>
                     <a class="btn btn-secondary" href="{{ path('user_edit', {'id': user.id}) }}">edit</a>
                 </td>
+                {% endif %}
             </tr>
         {% else %}
             <tr>
@@ -38,6 +42,7 @@
         {% endfor %}
         </tbody>
     </table>
-
+    {% if is_granted("ROLE_ADMIN")%}
     <a class="btn btn-success" href="{{ path('user_new') }}">Create new</a>
+    {% endif %}
 {% endblock %}

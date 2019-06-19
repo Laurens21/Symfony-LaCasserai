@@ -21,10 +21,14 @@
             </tr>
             <tr>
                 <th>Image</th>
-                <td>{{ room.image }}</td>
+                <td><img src={{ vich_uploader_asset(room, 'imageFile') }} width="300px" height="200px"></td>
             </tr>
         </tbody>
     </table>
+
+    {{ include('booking/new.html.twig') }}
+
+    {% if is_granted("ROLE_ADMIN")%}
     <div style="display: flex">
     <a style="margin-right: 10px" class="btn btn-primary" href="{{ path('room_index') }}">back to list</a>
 
@@ -32,4 +36,5 @@
 
     {{ include('room/_delete_form.html.twig') }}
     </div>
+    {% endif %}
 {% endblock %}

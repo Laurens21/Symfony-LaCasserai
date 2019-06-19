@@ -15,7 +15,9 @@
                 <th>Date_payment_due</th>
                 <th>Date_payment_made</th>
                 <th>Amount_paid</th>
+                {% if is_granted("ROLE_ADMIN")%}
                 <th>actions</th>
+                {% endif %}
             </tr>
         </thead>
         <tbody>
@@ -28,10 +30,12 @@
                 <td>{{ payment.datePaymentDue ? payment.datePaymentDue|date('Y-m-d') : '' }}</td>
                 <td>{{ payment.datePaymentMade ? payment.datePaymentMade|date('Y-m-d') : '' }}</td>
                 <td>{{ payment.amountPaid }}</td>
+                {% if is_granted("ROLE_ADMIN")%}
                 <td>
                     <a style="margin-right: 10px" class="btn btn-primary" href="{{ path('payment_show', {'id': payment.id}) }}">show</a>
                     <a class="btn btn-secondary" href="{{ path('payment_edit', {'id': payment.id}) }}">edit</a>
                 </td>
+                {% endif %}
             </tr>
         {% else %}
             <tr>
@@ -40,6 +44,7 @@
         {% endfor %}
         </tbody>
     </table>
-
+    {% if is_granted("ROLE_ADMIN")%}
     <a class="btn btn-success" href="{{ path('payment_new') }}">Create new</a>
+    {% endif %}
 {% endblock %}
