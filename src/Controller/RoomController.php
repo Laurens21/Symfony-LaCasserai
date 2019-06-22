@@ -9,12 +9,20 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Security;
 
 /**
  * @Route("/room")
  */
 class RoomController extends AbstractController
 {
+    private $security;
+
+    public function __construct(Security $security)
+    {
+        $this->security = $security;
+    }
+
     /**
      * @Route("/", name="room_index", methods={"GET"})
      */
@@ -30,22 +38,26 @@ class RoomController extends AbstractController
      */
     public function new(Request $request): Response
     {
-        $room = new Room();
-        $form = $this->createForm(RoomType::class, $room);
-        $form->handleRequest($request);
+        if ($this->security->isGranted('ROLE_ADMIN')){
+            $room = new Room();
+            $form = $this->createForm(RoomType::class, $room);
+            $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($room);
-            $entityManager->flush();
+            if ($form->isSubmitted() && $form->isValid()) {
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->persist($room);
+                $entityManager->flush();
 
-            return $this->redirectToRoute('room_index');
+                return $this->redirectToRoute('room_index');
+            }
+
+            return $this->render('room/new.html.twig', [
+                'room' => $room,
+                'form' => $form->createView(),
+            ]);
+        } else {
+            return $this->redirectToRoute('default');
         }
-
-        return $this->render('room/new.html.twig', [
-            'room' => $room,
-            'form' => $form->createView(),
-        ]);
     }
 
     /**
@@ -63,21 +75,25 @@ class RoomController extends AbstractController
      */
     public function edit(Request $request, Room $room): Response
     {
-        $form = $this->createForm(RoomType::class, $room);
-        $form->handleRequest($request);
+        if ($this->security->isGranted('ROLE_ADMIN')){
+            $form = $this->createForm(RoomType::class, $room);
+            $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            if ($form->isSubmitted() && $form->isValid()) {
+                $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('room_index', [
-                'id' => $room->getId(),
+                return $this->redirectToRoute('room_index', [
+                    'id' => $room->getId(),
+                ]);
+            }
+
+            return $this->render('room/edit.html.twig', [
+                'room' => $room,
+                'form' => $form->createView(),
             ]);
+        } else {
+            return $this->redirectToRoute('default');
         }
-
-        return $this->render('room/edit.html.twig', [
-            'room' => $room,
-            'form' => $form->createView(),
-        ]);
     }
 
     /**
@@ -85,12 +101,16 @@ class RoomController extends AbstractController
      */
     public function delete(Request $request, Room $room): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$room->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($room);
-            $entityManager->flush();
-        }
+        if ($this->security->isGranted('ROLE_ADMIN')){
+            if ($this->isCsrfTokenValid('delete'.$room->getId(), $request->request->get('_token'))) {
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->remove($room);
+                $entityManager->flush();
+            }
 
-        return $this->redirectToRoute('room_index');
+            return $this->redirectToRoute('room_index');
+        } else {
+            return $this->redirectToRoute('default');
+        }
     }
 }

@@ -9,20 +9,32 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Security;
 
 /**
  * @Route("/roomtype")
  */
 class RoomtypeController extends AbstractController
 {
+    private $security;
+
+    public function __construct(Security $security)
+    {
+        $this->security = $security;
+    }
+    
     /**
      * @Route("/", name="roomtype_index", methods={"GET"})
      */
     public function index(RoomtypeRepository $roomtypeRepository): Response
     {
-        return $this->render('roomtype/index.html.twig', [
-            'roomtypes' => $roomtypeRepository->findAll(),
-        ]);
+        if ($this->security->isGranted('ROLE_ADMIN')){
+            return $this->render('roomtype/index.html.twig', [
+                'roomtypes' => $roomtypeRepository->findAll(),
+            ]);
+        } else {
+            return $this->redirectToRoute('default');
+        }
     }
 
     /**
@@ -30,22 +42,26 @@ class RoomtypeController extends AbstractController
      */
     public function new(Request $request): Response
     {
-        $roomtype = new Roomtype();
-        $form = $this->createForm(RoomtypeType::class, $roomtype);
-        $form->handleRequest($request);
+        if ($this->security->isGranted('ROLE_ADMIN')){
+            $roomtype = new Roomtype();
+            $form = $this->createForm(RoomtypeType::class, $roomtype);
+            $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($roomtype);
-            $entityManager->flush();
+            if ($form->isSubmitted() && $form->isValid()) {
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->persist($roomtype);
+                $entityManager->flush();
 
-            return $this->redirectToRoute('roomtype_index');
+                return $this->redirectToRoute('roomtype_index');
+            }
+
+            return $this->render('roomtype/new.html.twig', [
+                'roomtype' => $roomtype,
+                'form' => $form->createView(),
+            ]);
+        } else {
+            return $this->redirectToRoute('default');            
         }
-
-        return $this->render('roomtype/new.html.twig', [
-            'roomtype' => $roomtype,
-            'form' => $form->createView(),
-        ]);
     }
 
     /**
@@ -53,9 +69,13 @@ class RoomtypeController extends AbstractController
      */
     public function show(Roomtype $roomtype): Response
     {
-        return $this->render('roomtype/show.html.twig', [
-            'roomtype' => $roomtype,
-        ]);
+        if ($this->security->isGranted('ROLE_ADMIN')){
+            return $this->render('roomtype/show.html.twig', [
+                'roomtype' => $roomtype,
+            ]);
+        } else {
+            return $this->redirectToRoute('default');  
+        }
     }
 
     /**
@@ -63,21 +83,25 @@ class RoomtypeController extends AbstractController
      */
     public function edit(Request $request, Roomtype $roomtype): Response
     {
-        $form = $this->createForm(RoomtypeType::class, $roomtype);
-        $form->handleRequest($request);
+        if ($this->security->isGranted('ROLE_ADMIN')){
+            $form = $this->createForm(RoomtypeType::class, $roomtype);
+            $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            if ($form->isSubmitted() && $form->isValid()) {
+                $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('roomtype_index', [
-                'id' => $roomtype->getId(),
+                return $this->redirectToRoute('roomtype_index', [
+                    'id' => $roomtype->getId(),
+                ]);
+            }
+
+            return $this->render('roomtype/edit.html.twig', [
+                'roomtype' => $roomtype,
+                'form' => $form->createView(),
             ]);
+        } else {
+            return $this->redirectToRoute('default');  
         }
-
-        return $this->render('roomtype/edit.html.twig', [
-            'roomtype' => $roomtype,
-            'form' => $form->createView(),
-        ]);
     }
 
     /**
@@ -85,12 +109,16 @@ class RoomtypeController extends AbstractController
      */
     public function delete(Request $request, Roomtype $roomtype): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$roomtype->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($roomtype);
-            $entityManager->flush();
-        }
+        if ($this->security->isGranted('ROLE_ADMIN')){
+            if ($this->isCsrfTokenValid('delete'.$roomtype->getId(), $request->request->get('_token'))) {
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->remove($roomtype);
+                $entityManager->flush();
+            }
 
-        return $this->redirectToRoute('roomtype_index');
+            return $this->redirectToRoute('roomtype_index');
+        } else {
+            return $this->redirectToRoute('default');  
+        }
     }
 }

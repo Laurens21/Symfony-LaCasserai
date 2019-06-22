@@ -8,24 +8,36 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Security;
 
 /**
  * @Route("/user")
  */
 class UserController extends AbstractController
 {
+    private $security;
+
+    public function __construct(Security $security)
+    {
+        $this->security = $security;
+    }
+
     /**
      * @Route("/", name="user_index", methods={"GET"})
      */
     public function index(): Response
     {
-        $users = $this->getDoctrine()
-            ->getRepository(User::class)
-            ->findAll();
+        if ($this->security->isGranted('ROLE_ADMIN')){
+            $users = $this->getDoctrine()
+                ->getRepository(User::class)
+                ->findAll();
 
-        return $this->render('user/index.html.twig', [
-            'users' => $users,
-        ]);
+            return $this->render('user/index.html.twig', [
+                'users' => $users,
+            ]);
+        } else {
+            return $this->redirectToRoute('default');
+        }
     }
 
     /**
@@ -33,22 +45,26 @@ class UserController extends AbstractController
      */
     public function new(Request $request): Response
     {
-        $user = new User();
-        $form = $this->createForm(UserType::class, $user);
-        $form->handleRequest($request);
+        if ($this->security->isGranted('ROLE_ADMIN')){
+            $user = new User();
+            $form = $this->createForm(UserType::class, $user);
+            $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($user);
-            $entityManager->flush();
+            if ($form->isSubmitted() && $form->isValid()) {
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->persist($user);
+                $entityManager->flush();
 
-            return $this->redirectToRoute('user_index');
+                return $this->redirectToRoute('user_index');
+            }
+
+            return $this->render('user/new.html.twig', [
+                'user' => $user,
+                'form' => $form->createView(),
+            ]);
+        } else {
+            return $this->redirectToRoute('default');
         }
-
-        return $this->render('user/new.html.twig', [
-            'user' => $user,
-            'form' => $form->createView(),
-        ]);
     }
 
     /**
@@ -56,9 +72,13 @@ class UserController extends AbstractController
      */
     public function show(User $user): Response
     {
-        return $this->render('user/show.html.twig', [
-            'user' => $user,
-        ]);
+        if ($this->security->isGranted('ROLE_ADMIN')){
+            return $this->render('user/show.html.twig', [
+                'user' => $user,
+            ]);
+        } else {
+            return $this->redirectToRoute('default');            
+        }
     }
 
     /**
@@ -66,6 +86,7 @@ class UserController extends AbstractController
      */
     public function edit(Request $request, User $user): Response
     {
+        if ($this->security->isGranted('ROLE_ADMIN')){
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
 
@@ -81,6 +102,9 @@ class UserController extends AbstractController
             'user' => $user,
             'form' => $form->createView(),
         ]);
+        } else {
+            return $this->redirectToRoute('default');            
+        }
     }
 
     /**
@@ -88,6 +112,7 @@ class UserController extends AbstractController
      */
     public function delete(Request $request, User $user): Response
     {
+        if ($this->security->isGranted('ROLE_ADMIN')){
         if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($user);
@@ -95,5 +120,8 @@ class UserController extends AbstractController
         }
 
         return $this->redirectToRoute('user_index');
+        } else {
+            return $this->redirectToRoute('default');            
+        }
     }
 }
