@@ -28,15 +28,17 @@ class BookingController extends AbstractController
      */
     public function index(BookingRepository $bookingRepository): Response
     {   
-        $user = $this->getUser()->getId();
         if ($this->security->isGranted('ROLE_ADMIN')){
             return $this->render('booking/index.html.twig', [
                 'bookings' => $bookingRepository->findAll(),
             ]);
-        } else {
+        } elseif($this->security->isGranted('ROLE_CUSTOMER')) {
+            $user = $this->getUser()->getId();
             return $this->render('booking/index.html.twig', [
                 'bookings' => $bookingRepository->findBy(['user_id' => $user]),
             ]);
+        } else {
+            return $this->redirectToRoute('default');
         }
     }
 
@@ -45,6 +47,7 @@ class BookingController extends AbstractController
      */
     public function new(Request $request): Response
     {
+        if ($this->security->isGranted('ROLE_ADMIN')){
         $booking = new Booking();
         $form = $this->createForm(BookingType::class, $booking);
         $form->handleRequest($request);
@@ -61,6 +64,9 @@ class BookingController extends AbstractController
             'booking' => $booking,
             'form' => $form->createView(),
         ]);
+        } else {
+            return $this->redirectToRoute('default');
+        }
     }
 
     /**
@@ -68,9 +74,13 @@ class BookingController extends AbstractController
      */
     public function show(Booking $booking): Response
     {
-        return $this->render('booking/show.html.twig', [
-            'booking' => $booking,
-        ]);
+        if($this->security->isGranted('ROLE_ADMIN')){
+            return $this->render('booking/show.html.twig', [
+                'booking' => $booking,
+            ]);
+        } else {
+            return $this->redirectToRoute('default');
+        }
     }
 
     /**
@@ -78,6 +88,7 @@ class BookingController extends AbstractController
      */
     public function edit(Request $request, Booking $booking): Response
     {
+        if($this->security->isGranted('ROLE_ADMIN')){
         $form = $this->createForm(BookingType::class, $booking);
         $form->handleRequest($request);
 
@@ -93,6 +104,10 @@ class BookingController extends AbstractController
             'booking' => $booking,
             'form' => $form->createView(),
         ]);
+
+        } else {
+            return $this->redirectToRoute('default');
+        }
     }
 
     /**
@@ -100,12 +115,15 @@ class BookingController extends AbstractController
      */
     public function delete(Request $request, Booking $booking): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$booking->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($booking);
-            $entityManager->flush();
-        }
-
+        if($this->security->isGranted('ROLE_ADMIN')){
+            if ($this->isCsrfTokenValid('delete'.$booking->getId(), $request->request->get('_token'))) {
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->remove($booking);
+                $entityManager->flush();
+            }
         return $this->redirectToRoute('booking_index');
+        } else {
+            return $this->redirectToRoute('default');
+        }
     }
 }
