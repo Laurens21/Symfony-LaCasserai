@@ -9,6 +9,7 @@
             <p>check out date</p> 
             {{ form_widget(form.check_out_date) }}
         </div>
+        {% if is_granted('ROLE_ADMIN')%}
         <div style="display:none">
             <p>check out date</p> 
             {{ form_widget(form.user_id) }}
@@ -17,6 +18,7 @@
             <p>check out date</p> 
             {{ form_widget(form.room_id) }}
         </div>
+        {% endif %}
     </div>
     <button style="width: 12vw; margin: 0 0 20px 0; background-color: #343a40;" class="btn btn-secondary">{{ button_label|default('Check available rooms') }}</button>
 </div>
