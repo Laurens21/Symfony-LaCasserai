@@ -1,4 +1,15 @@
 {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button style="float: left; margin-right: 10px; " class="btn btn-success">{{ button_label|default('Save') }}</button>
+<div style="position:relative; top: -30px; background-color:rgba(18,19,24,0.8); width: 90%; margin: 0 auto; display: flex; flex-direction: column; align-items: center">
+    <div style="display: flex; justify-content: center; text-align: center">
+        <div style="margin: 20px; padding: 10px 20px; background-color: #343a40">
+            <p>check in date</p> 
+            {{ form_widget(form.check_in_date) }}
+        </div>
+        <div style="margin: 20px; padding: 10px 20px; background-color: #343a40">
+            <p>check out date</p> 
+            {{ form_widget(form.check_out_date) }}
+        </div>
+    </div>
+    <button style="width: 12vw; margin: 0 0 20px 0; background-color: #343a40;" class="btn btn-secondary">{{ button_label|default('Check available rooms') }}</button>
+</div>
 {{ form_end(form) }}

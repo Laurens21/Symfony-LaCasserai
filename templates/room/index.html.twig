@@ -33,7 +33,7 @@
                 </td>
                 {% elseif is_granted('ROLE_CUSTOMER') %}
                 <td>
-                    <a class="btn btn-primary" href="#">Book</a>
+                    <a class="btn btn-primary" href="{{ path('reservation') }}">Book</a>
                 </td>
                 {% endif %}
             </tr>

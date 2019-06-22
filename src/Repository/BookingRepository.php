@@ -5,6 +5,8 @@ namespace App\Repository;
 use App\Entity\Booking;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\DependencyInjection\Parameter;
 
 /**
  * @method Booking|null find($id, $lockMode = null, $lockVersion = null)
