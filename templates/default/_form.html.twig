@@ -9,6 +9,14 @@
             <p>check out date</p> 
             {{ form_widget(form.check_out_date) }}
         </div>
+        <div style="display:none">
+            <p>check out date</p> 
+            {{ form_widget(form.user_id) }}
+        </div>
+        <div style="display:none">
+            <p>check out date</p> 
+            {{ form_widget(form.room_id) }}
+        </div>
     </div>
     <button style="width: 12vw; margin: 0 0 20px 0; background-color: #343a40;" class="btn btn-secondary">{{ button_label|default('Check available rooms') }}</button>
 </div>
