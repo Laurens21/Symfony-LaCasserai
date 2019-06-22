@@ -13,7 +13,7 @@
             </div>
         </div>
     </div>
-        <form style="position:relative; top: -30px; background-color:rgba(18,19,24,0.8); width: 90%; margin: 0 auto; display: flex; flex-direction: column; align-items: center">
+        {# <form method="post" style="position:relative; top: -30px; background-color:rgba(18,19,24,0.8); width: 90%; margin: 0 auto; display: flex; flex-direction: column; align-items: center">
             <div style="display: flex; justify-content: center; text-align: center">
                 <div style="margin: 20px; padding: 10px 20px; background-color: #343a40">
                     <p>check in date</p>                    
@@ -26,5 +26,6 @@
                 </div>
             </div>
             <input style="width: 12vw; margin: 0 0 20px 0; background-color: #343a40;" class="btn btn-secondary" type="submit">
-        </form>
+        </form> #}
+        {{ include('default/_form.html.twig') }}
 {% endblock %}
