@@ -21,26 +21,41 @@ class BookingRepository extends ServiceEntityRepository
         parent::__construct($registry, Booking::class);
     }
 
-    
-    /**
-     * @param $startDate
-     * @param $endDate
-     * @return Booking[] Returns an array of Booking objects
-     */
-    public function findReservationsBetween($startDate, $endDate)
+    public function findvrijekamers($value)
     {
-        return $this->createQueryBuilder('b')
-            ->select("IDENTITY(b.room)")
-            ->orWhere('(b.start_date BETWEEN :start AND :end)')
-            ->orWhere('(b.end_date BETWEEN :start AND :end)')
-            ->orWhere('(b.start_date <= :start and b.end_date >= :end)')
-            ->setParameters(new ArrayCollection([
-                new Parameter("start", $startDate),
-                new Parameter("end", $endDate)
-            ]))
-            ->getQuery()
-            ->getResult();
+
+        $qb = $this->createQueryBuilder('r')
+            ->andWhere('r.check_in_date <= :checkout')
+            ->andWhere('r.check_out_date >= :checkin')
+            ->setParameter('checkin', $value['checkin'])
+            ->setParameter('checkout', $value['checkout'])
+            ->orderBy('r.room_id', 'ASC')
+        ;
+
+        dump ($qb->getQuery()->getResult()) ;
+
+        return $qb->getQuery()->getResult();
     }
+    
+    // /**
+    //  * @param $startDate
+    //  * @param $endDate
+    //  * @return Booking[] Returns an array of Booking objects
+    //  */
+    // public function findReservationsBetween($startDate, $endDate)
+    // {
+    //     return $this->createQueryBuilder('b')
+    //         ->select("IDENTITY(b.room)")
+    //         ->orWhere('(b.start_date BETWEEN :start AND :end)')
+    //         ->orWhere('(b.end_date BETWEEN :start AND :end)')
+    //         ->orWhere('(b.start_date <= :start and b.end_date >= :end)')
+    //         ->setParameters(new ArrayCollection([
+    //             new Parameter("start", $startDate),
+    //             new Parameter("end", $endDate)
+    //         ]))
+    //         ->getQuery()
+    //         ->getResult();
+    // }
 
 
     // /**

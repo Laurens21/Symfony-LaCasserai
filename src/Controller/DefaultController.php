@@ -37,4 +37,42 @@ class DefaultController extends AbstractController
         ]);
     }
 
+        /**
+    * @Route("/reserveringenvrij", name="reserveringenvrij")
+    */
+    public function vrijekamers(BookingRepository $BookingRepository): Response
+    {
+        $value = ['checkin' => '2014-01-01', 'checkout' => '2014-01-01'];
+        $reserveringen = $BookingRepository->findvrijekamers($value);
+
+
+        $em = $this->getDoctrine()->getManager();
+        $kamers = $em->getRepository('App:Room')->findAll();
+
+        dump ($kamers);
+        $reskamers =[];
+        foreach ($reserveringen as $reservering) {
+            dump($reservering);
+            array_push($reskamers, $reservering->getRoomId()->getId());
+            dump($reskamers);
+        }
+
+
+        foreach ($kamers as $key => $kamer) {
+            foreach ($reskamers as $reskam) {
+                if ($kamer->getId() == $reskam) {
+                    // verwijder de bezette kamers.
+                    unset($kamers[$key]);  
+                }
+            }
+        }
+
+        dump($kamers);
+
+        return $this->render('room/index.html.twig', [
+            'rooms' => $kamers
+        ]);
+
+    }
+
 }
