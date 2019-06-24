@@ -126,4 +126,43 @@ class BookingController extends AbstractController
             return $this->redirectToRoute('default');
         }
     }
+
+    /**
+    * @Route("/reserveringenvrij", name="reserveringenvrij")
+    */
+    public function vrijekamers(BookingRepository $BookingRepository): Response
+    {
+        $startDate = ['start' => '2019-05-24'];
+        $endDate = ['end' => '2019-06-13'];
+        $reserveringen = $BookingRepository->findReservationsBetween($startDate,$endDate);
+
+
+        $em = $this->getDoctrine()->getManager();
+        $kamers = $em->getRepository('App:Room')->findAll();
+
+        dump ($kamers);
+        $reskamers =[];
+        foreach ($reserveringen as $reservering) {
+            dump($reservering);
+            array_push($reskamers, $reservering->getKamerid()->getId());
+            dump($reskamers);
+        }
+
+
+        foreach ($kamers as $key => $kamer) {
+            foreach ($reskamers as $reskam) {
+                if ($kamer->getId() == $reskam) {
+                    // verwijder de bezette kamers.
+                    unset($kamers[$key]);  
+                }
+            }
+        }
+
+        dump($kamers);
+
+        return $this->render('reserveringen/reserveringenvrij.html.twig', [
+            'kamers' => $kamers
+        ]);
+
+    }
 }

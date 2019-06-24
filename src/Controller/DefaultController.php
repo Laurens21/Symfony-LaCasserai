@@ -17,9 +17,6 @@ class DefaultController extends AbstractController
      */
     public function index(BookingRepository $bookingRepository , Request $request): Response
     {
-        if (session_status() == PHP_SESSION_NONE) {
-            session_start();
-        }
 
         $booking = new Booking();
         $form = $this->createForm(BookingType::class, $booking);
