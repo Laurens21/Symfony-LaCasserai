@@ -37,12 +37,12 @@ class DefaultController extends AbstractController
         ]);
     }
 
-        /**
+    /**
     * @Route("/reserveringenvrij", name="reserveringenvrij")
     */
     public function vrijekamers(BookingRepository $BookingRepository): Response
     {
-        $value = ['checkin' => '2014-01-01', 'checkout' => '2014-01-01'];
+        $value = ['checkin' => '2015-01-01', 'checkout' => '2015-01-01'];
         $reserveringen = $BookingRepository->findvrijekamers($value);
 
 
