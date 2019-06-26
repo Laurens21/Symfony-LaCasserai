@@ -9,47 +9,44 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Security;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class DefaultController extends AbstractController
 {
+
+    private $session;
+
+    public function __construct(SessionInterface $session)
+    {
+        $this->session = $session;
+    }
+
     /**
      * @Route("/", name="default")
      */
     public function index(BookingRepository $bookingRepository , Request $request): Response
     {
-
-        $booking = new Booking();
-        $form = $this->createForm(BookingType::class, $booking);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $_SESSION['start'] = $request->query->set('check_in_date');
-            $_SESSION['end'] = $request->query->set('check_out_date');
-            $bookingRepository->findReservationsBetween($_SESSION['start'], $_SESSION['end']);
-
-            return $this->redirectToRoute('room_index');
-        }
-
-        return $this->render('default/index.html.twig', [
-            'booking' => $booking,
-            'form' => $form->createView(),
-        ]);
+        return $this->render('default/index.html.twig');
     }
 
     /**
-    * @Route("/rooms", name="rooms")
+    * @Route("/rooms", name="room_check", methods={"POST"})
     */
     public function vrijekamers(BookingRepository $BookingRepository): Response
     {
-        $value = ['checkin' => '2014-01-01', 'checkout' => '2014-01-01'];
+        // $value = ['checkin' => '2014-01-01', 'checkout' => '2014-01-01'];
+
+        $StartDate = $_POST['StartDate'];
+        $EndDate = $_POST['EndDate'];
+        
+        $value = array('checkin' => $StartDate, 'checkout' => $EndDate);
+
         $reserveringen = $BookingRepository->findvrijekamers($value);
 
 
         $em = $this->getDoctrine()->getManager();
         $kamers = $em->getRepository('App:Room')->findAll();
 
-        dump ($kamers);
         $reskamers =[];
         foreach ($reserveringen as $reservering) {
             dump($reservering);

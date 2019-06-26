@@ -12,20 +12,45 @@
             </div>
         </div>
     </div>
-        {# <form method="post" style="position:relative; top: -30px; background-color:rgba(18,19,24,0.8); width: 90%; margin: 0 auto; display: flex; flex-direction: column; align-items: center">
+        <form method="post" action="{{ path('room_check')}}" style="position:relative; top: -30px; background-color:rgba(18,19,24,0.8); width: 90%; margin: 0 auto; display: flex; flex-direction: column; align-items: center">
             <div style="display: flex; justify-content: center; text-align: center">
                 <div style="margin: 20px; padding: 10px 20px; background-color: #343a40">
                     <p>check in date</p>                    
-                    <input class="form-control" style="background-color: rgb(18,19,24); color: white" type="date">
+                    <input min="{{ "0day"|date("Y-m-d") }}" max="{{ "+1year"|date("Y-m-d") }}" required name="StartDate" class="form-control" style="background-color: rgb(18,19,24); color: white" type="date">
                 </div>
 
                 <div style="margin: 20px; padding: 10px 20px; background-color: #343a40">
                     <p>check out date</p>                    
-                    <input class="form-control" style="background-color: rgb(18,19,24); color: white" type="date">
+                    <input min="{{ "+1day"|date("Y-m-d") }}" max="{{ "+1year+1week"|date("Y-m-d")}}" required name="EndDate" class="form-control" style="background-color: rgb(18,19,24); color: white" type="date">
                 </div>
             </div>
             <input style="width: 12vw; margin: 0 0 20px 0; background-color: #343a40;" class="btn btn-secondary" type="submit">
-        </form> #}
-        
-        {{ include('default/_form.html.twig') }}
+        </form>
+{% endblock %}
+{% block javascripts %}
+<script>
+        window.onload = () => {
+            const begin = document.getElementsByName("StartDate")[0];
+            const end = document.getElementsByName("EndDate")[0];
+
+            begin.addEventListener('input', e => {
+                const end_date = new Date(e.target.value);
+                const year = end_date.getFullYear();
+                let month = end_date.getMonth() + 1;
+                let day = end_date.getDate() + 1;
+
+                if (month < 10) {
+                    month = "0" + month
+                }
+                if (day < 10) {
+                    day = "0" + day
+                }
+
+                const maxMonth = end_date.getMonth() + 7;
+
+                end.setAttribute("min", `${year}-${month}-${day}`)
+                end.setAttribute("max", `${year}-${maxMonth}-${day}`)
+            })
+        }
+    </script>
 {% endblock %}
