@@ -12,7 +12,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Security;
 
 /**
- * @Route("/room")
+ * @Route("/rooms")
  */
 class RoomController extends AbstractController
 {

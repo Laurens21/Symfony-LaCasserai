@@ -24,8 +24,8 @@ class DefaultController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
-            $_SESSION['start'] = $request->query->get('check_in_date');
-            $_SESSION['end'] = $request->query->get('check_out_date');
+            $_SESSION['start'] = $request->query->set('check_in_date');
+            $_SESSION['end'] = $request->query->set('check_out_date');
             $bookingRepository->findReservationsBetween($_SESSION['start'], $_SESSION['end']);
 
             return $this->redirectToRoute('room_index');
@@ -38,11 +38,11 @@ class DefaultController extends AbstractController
     }
 
     /**
-    * @Route("/reserveringenvrij", name="reserveringenvrij")
+    * @Route("/rooms", name="rooms")
     */
     public function vrijekamers(BookingRepository $BookingRepository): Response
     {
-        $value = ['checkin' => '2015-01-01', 'checkout' => '2015-01-01'];
+        $value = ['checkin' => '2014-01-01', 'checkout' => '2014-01-01'];
         $reserveringen = $BookingRepository->findvrijekamers($value);
 
 
